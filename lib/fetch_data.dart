@@ -1,6 +1,24 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+Future<String> moreDetails(
+    String startCity, String endCity) async {
+  final response = await http.post(
+    Uri.parse('http://localhost:3000/generate_path'),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({'startCity': startCity, 'endCity': endCity}),
+  );
+
+  if (response.statusCode == 200) {
+    final decodedResponse = jsonDecode(response.body);
+    return decodedResponse['text'];
+  } else {
+    throw Exception('Failed to give more details.');
+  }
+}
+
 Future<List<String>> calculateShortestPath(
     String startCity, String endCity) async {
   final response = await http.post(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graphview/graphview.dart';
+import 'package:graphview/GraphView.dart';
 
 Widget rectangleWidget(String a) {
   return InkWell(
@@ -50,7 +50,7 @@ class _GraphScreenState extends State<GraphScreen> {
               child: GraphView(
                 graph: widget.graph,
                 paint: Paint()
-                  ..color = Colors.blue, // Customize node appearance
+                  ..color = Colors.blue,
                 algorithm: SugiyamaAlgorithm(SugiyamaConfiguration()),
 
                 builder: (Node node) {

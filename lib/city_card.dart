@@ -18,7 +18,6 @@ class CityCard extends StatelessWidget {
           style: TextStyle(
               color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
         ),
-        // Add more information about the city if needed
       ),
     );
   }

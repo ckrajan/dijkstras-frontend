@@ -2,28 +2,7 @@ import 'package:dijkstra_app/city_graph.dart';
 import 'package:dijkstra_app/fetch_data.dart';
 import 'package:dijkstra_app/test.dart';
 import 'package:flutter/material.dart';
-import 'package:graphview/graphview.dart';
-
-// class City {
-//   final String id;
-//   final String name;
-//   final List<Neighbor> neighbors;
-
-//   City({required this.id, required this.name, required this.neighbors});
-
-//   List<String> getNeighborNames() {
-//     return neighbors.map((neighbor) => neighbor.name).toList();
-//   }
-// }
-
-// class Neighbor {
-//   final String name;
-//   final int distance;
-
-//   Neighbor({required this.name, required this.distance});
-// }
-
-//------------------------------------------------
+import 'package:graphview/GraphView.dart';
 
 class CalculatePathButton extends StatefulWidget {
   final Future<void> Function(String, String) calculateFunction;
@@ -42,10 +21,7 @@ class _CalculatePathButtonState extends State<CalculatePathButton> {
   Set<String> shortestPathSet = {};
   final graph = Graph();
   final Map<String, Node> nodeMap = {};
-  // late GraphView graphView;
-  // List<City> citiess = [];
-
-  //------------------------------------------------
+  String moredetails = '';
 
   @override
   void initState() {
@@ -53,11 +29,8 @@ class _CalculatePathButtonState extends State<CalculatePathButton> {
     _loadCities();
   }
 
-  //------------------------------------------------
-
   Future<void> _loadCities() async {
     final loadedCities = await fetchAllCities();
-    //print(loadedCities);
     setState(() {
       cities = loadedCities;
     });
@@ -66,28 +39,7 @@ class _CalculatePathButtonState extends State<CalculatePathButton> {
       nodeMap[city['_id']] = node;
       graph.addNode(node);
     }
-
-    // // Create edges between cities and their neighbors
-    // for (final city in cities!) {
-    //   final currentNode = nodeMap[city['_id']];
-    //   if (currentNode != null) {
-    //     for (final neighbor in city['neighbors']) {
-    //       print(city['neighbors']);
-    //       final neighborNode = nodeMap[neighbor['name']];
-    //       print(neighborNode);
-    //       if (neighborNode != null) {
-    //         graph.addEdge(
-    //           currentNode,
-    //           neighborNode,
-    //           paint: Paint()..color = Colors.green, // Customize edge appearance
-    //         );
-    //       }
-    //     }
-    //   }
-    // }
   }
-
-  //------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -96,15 +48,15 @@ class _CalculatePathButtonState extends State<CalculatePathButton> {
       height: 800,
       child: Column(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => GraphScreen(graph: graph),
-                  ),
-                );
-              },
-              child: const Text('navigate')),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       Navigator.of(context).push(
+          //         MaterialPageRoute(
+          //           builder: (context) => GraphScreen(graph: graph),
+          //         ),
+          //       );
+          //     },
+          //     child: const Text('navigate')),
           Row(
             children: [
               Expanded(
@@ -135,19 +87,55 @@ class _CalculatePathButtonState extends State<CalculatePathButton> {
                 });
               } catch (e) {
                 print('Error: $e');
-                // Handle error appropriately
               }
             },
-            child: const Text('Calculate Shortest Path'),
+            child: const Text('Find Shortest Route'),
           ),
           shortestPath.isNotEmpty
               ? Text('Shortest Path: ${shortestPath.join(" -> ")}')
               : const SizedBox.shrink(),
-          Flexible(
-            child: CityGraph(
-                cities!.map((city) => city['name'] as String).toList(),
-                shortestPath),
+          // Flexible(
+          //   child: CityGraph(
+          //       cities!.map((city) => city['name'] as String).toList(),
+          //       shortestPath),
+          // ),
+  
+          const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        final detail = await moreDetails(
+                          startCityController.text,
+                          endCityController.text,
+                                );
+                        setState(() {
+                          moredetails = detail;
+                        });
+                      } catch (e) {
+                        print('Error: $e');
+                      }
+                    },
+                    child: const Text('More details about cities'),
+                  ),
+
+
+                   Expanded(
+            flex: 1,
+            child:  SingleChildScrollView(
+              scrollDirection: Axis.vertical,//.horizontal
+              child:  Text(
+                'More Details: ${moredetails}',     
+                // style:  TextStyle(
+                //   fontSize: 16.0, color: Colors.white,
+                // ),
+              ),
+            ),
           ),
+
+              //     moredetails.isNotEmpty
+              // ? Text('More Details: ${moredetails}')
+              // : const SizedBox.shrink(),
+
         ],
       ),
     );

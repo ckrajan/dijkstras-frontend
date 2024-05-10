@@ -1,10 +1,7 @@
 import 'package:dijkstra_app/screen_list.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/rendering.dart';
 
 void main() {
-  // debugPaintSizeEnabled = true;
-
   runApp(const MyApp());
 }
 

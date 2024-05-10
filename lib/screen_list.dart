@@ -27,17 +27,14 @@ class _CityListScreenState extends State<CityListScreen> {
   Future<void> _calculatePath(String startCity, String endCity) async {
     try {
       final path = await calculateShortestPath(startCity, endCity);
-      print('Shortest Path: $path'); // Add this line
+      print('Shortest Path: $path');
 
       setState(() {
         shortestPathSet =
             Set.from(path); // Update the set of city names in shortest path
       });
-
-      // ---- new
     } catch (e) {
       print('Error: $e');
-      // Handle error appropriately
     }
   }
 
